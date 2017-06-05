@@ -11,7 +11,8 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular/cli/plugins/karma'),
-      require('karma-junit-reporter')
+      require('karma-junit-reporter'),
+      require('karma-phantomjs2-launcher')
     ],
     client:{
       clearContext: false // leave Jasmine Spec Runner output visible in browser
@@ -48,13 +49,33 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome_without_sandbox'],
+    browsers: ['PhantomJS2_custom'],
+    // you can define custom flags 
+    customLaunchers: {
+      'PhantomJS2_custom': {
+        base: 'PhantomJS2',
+        options: {
+          windowName: 'my-window',
+          settings: {
+            webSecurityEnabled: false
+          },
+        },
+        flags: ['--load-images=true'],
+        debug: true
+      }
+    },
+ 
+    phantomjsLauncher: {
+      // Have phantomjs exit if a ResourceError is encountered (useful if karma exits without killing phantom) 
+      exitOnResourceError: true
+    },
+    /*browsers: ['Chrome_without_sandbox'],
     customLaunchers: {
       Chrome_without_sandbox: {
         base: 'Chrome',
         flags: ['--no-sandbox'] // with sandbox it fails under Docker
       }
-    },
+    },*/
     singleRun: true
   });
 };
